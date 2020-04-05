@@ -1,0 +1,2 @@
+git config --global user.name "DJANGO LEARN" && git config --global user.email "djangolearn.git@gmail.com" && ssh-keygen -t rsa -b 4096 -C "djangolearn.git@gmail.com"
+cat /root/.ssh/id_rsa.pub
