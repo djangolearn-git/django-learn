@@ -102,11 +102,11 @@ cat /root/.ssh/id_rsa.pub
 
 CLONE PROJECT
 =============
-git clone git@github.com:shankardakolia/Django3Project.git
+git clone git@github.com:djangolearn-git/django-learn.git
 
 INSTALL APPS IN VIRTUAL ENVIRONMENT
 ===================================
-cd /var/projects/venv/Django3Project && source /var/projects/venv/bin/activate && pip install -r requirements.txt && 'pip install --upgrade pip
+cd /var/projects/venv/django-learn && pip install -r requirements.txt && 'pip install --upgrade pip
 
 CREATE APACHE CONF FILE
 =======================
