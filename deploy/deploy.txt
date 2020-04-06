@@ -1,7 +1,7 @@
 DEPLOY DJANGO ON APACHE PRODUCTION SERVER
 =========================================
 
-#rsync -av /var/projects/myenvironment/lib/python3.6/site-packages/django/contrib/admin/static/ /var/projects/myenvironment/Django3Project/static/
+#rsync -av /var/projects/venv/lib/python3.6/site-packages/django/contrib/admin/static/ /var/projects/venv/Django3Project/static/
 
 
 CONNECT WITH PUTTY AND SETUP STARTUP CONFIG
@@ -85,21 +85,17 @@ DJANGO,PYTHON SETUP AND MOD WSGI
 
 Default Python + Virtualenv (Install This)
 ==========================================
-dnf install -y python3 python3-pip python3-devel python3-virtualenv mysql-devel && yum -y install mod_wsgi && pip install --upgrade pip
+dnf install -y python3 python3-pip python3-devel python3-virtualenv mysql-devel && yum -y install mod_wsgi && pip3 install --upgrade pip
 
-Python 3.8
-==========
-sudo yum -y groupinstall "Development Tools" && sudo yum -y install openssl-devel bzip2-devel libffi-devel && cd /usr/src/ && wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tgz && tar xvf Python-3.8.2.tgz && cd Python-3.8.2 && ./configure --enable-optimizations && make install
-sudo yum -y install python3-devel python3-virtualenv mysql-devel && yum -y install mod_wsgi
 
 CREATE VIRTUAL ENVIRONMENT AND activate
 =======================================
 groupadd www && vim /etc/group   #Add root and pache to the newly created group www:x:1000:root,apache
-mkdir /var/projects && semanage fcontext -a -t httpd_sys_content_t "/var/projects(/.*)?" && restorecon -Rv /var/projects && cd /var/projects && python3 -m venv myenvironment && cd myenvironment/ && source bin/activate
+mkdir /var/projects && semanage fcontext -a -t httpd_sys_content_t "/var/projects(/.*)?" && restorecon -Rv /var/projects && cd /var/projects && python3 -m venv venv && cd venv/ && source bin/activate
 
 GIT CONFIG
 ==========
-git config --global user.name "SHANKAR DAKOLIA" && git config --global user.email "shankardakolia@gmail.com" && ssh-keygen -t rsa -b 4096 -C "shankardakolia@gmail.com"
+git config --global user.name "DJANGO LEARN" && git config --global user.email "djangolearn.git@gmail.com" && ssh-keygen -t rsa -b 4096 -C "djangolearn.git@gmail.com"
 cat /root/.ssh/id_rsa.pub
 
 # Add SSH key to github
@@ -110,7 +106,7 @@ git clone git@github.com:shankardakolia/Django3Project.git
 
 INSTALL APPS IN VIRTUAL ENVIRONMENT
 ===================================
-cd /var/projects/myenvironment/Django3Project && source /var/projects/myenvironment/bin/activate && pip install -r requirements.txt && 'pip install --upgrade pip
+cd /var/projects/venv/Django3Project && source /var/projects/venv/bin/activate && pip install -r requirements.txt && 'pip install --upgrade pip
 
 CREATE APACHE CONF FILE
 =======================
@@ -118,8 +114,8 @@ vim /etc/httpd/conf.d/djserver.conf
 
 <VirtualHost *:80>
         ServerName djserver.localhost
-        DocumentRoot /var/projects/myenvironment/Django3Project
-        <Directory /var/projects/myenvironment/Django3Project/Django3Project>
+        DocumentRoot /var/projects/venv/Django3Project
+        <Directory /var/projects/venv/Django3Project/Django3Project>
                 Require all granted
                 AllowOverride all
                 Options FollowSymlinks
@@ -127,18 +123,18 @@ vim /etc/httpd/conf.d/djserver.conf
                         Require all granted
                 </Files>
         </Directory>
-        <Directory /var/projects/myenvironment/Django3Project/staticfiles>
+        <Directory /var/projects/venv/Django3Project/staticfiles>
                 Require all granted
         </Directory>
-        <Directory /var/projects/myenvironment/Django3Project/static/media>
+        <Directory /var/projects/venv/Django3Project/static/media>
                 Require all granted
         </Directory>
-        Alias /static /var/projects/myenvironment/Django3Project/staticfiles
-        Alias /media /var/projects/myenvironment/Django3Project/media
-        WSGIDaemonProcess django.localhost python-path=/var/projects/myenvironment:/var/projects/myenvironment/lib/python3.6/site-packages
+        Alias /static /var/projects/venv/Django3Project/staticfiles
+        Alias /media /var/projects/venv/Django3Project/media
+        WSGIDaemonProcess django.localhost python-path=/var/projects/venv:/var/projects/venv/lib/python3.6/site-packages
         WSGIProcessGroup django.localhost
         WSGIApplicationGroup %{GLOBAL}
-        WSGIScriptAlias / /var/projects/myenvironment/Django3Project/Django3Project/wsgi.py
+        WSGIScriptAlias / /var/projects/venv/Django3Project/Django3Project/wsgi.py
         ErrorLog /var/log/httpd/error.log
         CustomLog /var/log/httpd/access.log combined
 </VirtualHost>
@@ -152,6 +148,6 @@ setsebool -P httpd_can_network_connect_db=1
 
 COPY MODIFIED FILES FOR VIRTUAL ENVIRONMENT
 ===========================================
-yes | cp -rf /var/projects/myenvironment/Django3Project/env_modified_files/* /var/projects/myenvironment/lib/python3.6/site-packages/django/db/backends/mysql/
-cd /var/projects/myenvironment/Django3Project && chown root.www -R /var/projects && chmod 775 -R /var/projects && python manage.py migrate && python manage.py createsuperuser
+yes | cp -rf /var/projects/venv/Django3Project/env_modified_files/* /var/projects/venv/lib/python3.6/site-packages/django/db/backends/mysql/
+cd /var/projects/venv/Django3Project && chown root.www -R /var/projects && chmod 775 -R /var/projects && python manage.py migrate && python manage.py createsuperuser
 python manage.py collectstatic && git stash push --include-untracked && reboot
