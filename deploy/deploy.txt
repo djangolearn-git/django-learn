@@ -103,19 +103,30 @@ cat /root/.ssh/id_rsa.pub
 CLONE PROJECT
 =============
 git clone git@github.com:djangolearn-git/django-learn.git
+git reset HEAD --hard
 
 INSTALL APPS IN VIRTUAL ENVIRONMENT
 ===================================
-cd /var/projects/venv/django-learn && pip install -r requirements.txt && 'pip install --upgrade pip
+cd /var/projects/venv/django-learn && pip install -r requirements.txt && pip install --upgrade pip
 
-CREATE APACHE CONF FILE
-=======================
-vim /etc/httpd/conf.d/djserver.conf
+
+MYSQL CONNECT ERROR WITH APACHE
+===============================
+setsebool -P httpd_can_network_connect_db=1
+
+FINAL SETUP
+===========
+chown root.www -R /var/projects && chmod 775 -R /var/projects
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+
+vim /etc/httpd/conf.d/djanolearn.conf
 
 <VirtualHost *:80>
-        ServerName djserver.localhost
-        DocumentRoot /var/projects/venv/Django3Project
-        <Directory /var/projects/venv/Django3Project/Django3Project>
+        ServerName dj.djangolearn.com
+        DocumentRoot /var/projects/venv/django-learn
+        <Directory /var/projects/venv/django-learn/LIBRARY>
                 Require all granted
                 AllowOverride all
                 Options FollowSymlinks
@@ -123,28 +134,24 @@ vim /etc/httpd/conf.d/djserver.conf
                         Require all granted
                 </Files>
         </Directory>
-        <Directory /var/projects/venv/Django3Project/staticfiles>
+        <Directory /var/projects/venv/django-learn/staticfiles>
                 Require all granted
         </Directory>
-        <Directory /var/projects/venv/Django3Project/static/media>
+        <Directory /var/projects/venv/django-learn/static/media>
                 Require all granted
         </Directory>
-        Alias /static /var/projects/venv/Django3Project/staticfiles
-        Alias /media /var/projects/venv/Django3Project/media
-        WSGIDaemonProcess django.localhost python-path=/var/projects/venv:/var/projects/venv/lib/python3.6/site-packages
-        WSGIProcessGroup django.localhost
+        Alias /static /var/projects/venv/django-learn/staticfiles
+        Alias /media /var/projects/venv/django-learn/media
+        WSGIDaemonProcess dj.djangolearn.com python-path=/var/projects/venv:/var/projects/venv/lib/python3.6/site-packages
+        WSGIProcessGroup dj.djangolearn.com
         WSGIApplicationGroup %{GLOBAL}
-        WSGIScriptAlias / /var/projects/venv/Django3Project/Django3Project/wsgi.py
-        ErrorLog /var/log/httpd/error.log
-        CustomLog /var/log/httpd/access.log combined
+        WSGIScriptAlias / /var/projects/venv/django-learn/LIBRARY/wsgi.py
+        ErrorLog /var/log/httpd/errorlms.log
+        CustomLog /var/log/httpd/accesslms.log combined
 </VirtualHost>
 
+systemctl restart httpd
 
-Save and Exit
-
-MYSQL CONNECT ERROR WITH APACHE
-===============================
-setsebool -P httpd_can_network_connect_db=1
 
 COPY MODIFIED FILES FOR VIRTUAL ENVIRONMENT
 ===========================================
