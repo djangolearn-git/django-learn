@@ -30,6 +30,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# App Config Settings
+COMPANY_NAME = 'Empty'
+APP_VERSION = 'Empty'
+DEVELOPER_NAME = 'Empty'
+COMPANY_LONG_NAME = 'Empty'
+# Application definition
 
 # Application definition
 
