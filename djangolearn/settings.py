@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import pymysql
+from django.contrib import messages
 
 pymysql.install_as_MySQLdb()
 
@@ -29,6 +30,11 @@ SECRET_KEY = '3*!t+m-8zn)@x2q#^ea6y-@xo27%+byv0vz)x*s2&js4*07%kw'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+# Messaging Framework
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
 
 # App Config Settings
 COMPANY_NAME = 'Empty'
