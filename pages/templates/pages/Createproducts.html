@@ -1,0 +1,47 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Add Products{% endblock title %}
+
+
+{% include 'pages/messages.html' %}
+
+{% block content %}
+<div class="container mt-5"></div>
+<div class="row mx-1 my-1">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-dark text-white">
+        Products Entry Form
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="productname">Name</label>
+            <input type="text" required class="form-control" id="productname" name="productname"
+              placeholder="Enter Product Name" oninvalid="this.setCustomValidity('Product Name cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+          <div class="form-group">
+            <label for="productdescription">Description</label>
+            <input type="text" required class="form-control" id="productdescription" name="productdescription"
+              placeholder="Enter Product Description" oninvalid="this.setCustomValidity('Product Description cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock content %}

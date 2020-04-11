@@ -9,5 +9,6 @@ class CustomStudent(admin.ModelAdmin):
 
 admin.site.register(Appsettings)
 admin.site.register(Student,CustomStudent)
+admin.site.register(Product)
 
 

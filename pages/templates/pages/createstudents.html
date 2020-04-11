@@ -1,0 +1,71 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Add Products{% endblock title %}
+
+
+{% block content %}
+{% include 'pages/messages.html' %}
+<div class="container mt-5"></div>
+<div class="row mx-1 my-1">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-dark text-white">
+        Products Entry Form
+      </div>
+      <div class="card-body m-3">
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="FirstName">First Name</label>
+            <input type="text" required class="form-control" id="first_name" name="first_name"
+              placeholder="" oninvalid="this.setCustomValidity('First Name cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+          <div class="form-group">
+            <label for="LastName">Last Name</label>
+            <input type="text" required class="form-control" id="last_name" name="last_name"
+              placeholder="" oninvalid="this.setCustomValidity('Last Name cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+          <div class="form-group">
+            <label for="Standard">Standard</label>
+            <input type="text" required class="form-control" id="std" name="std"
+              placeholder="" oninvalid="this.setCustomValidity('Standard cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+            <div class="form-group">
+            <label for="Batch_number">Batch Number</label>
+            <input type="text" required class="form-control" id="batch_number" name="batch_number"
+              placeholder="" oninvalid="this.setCustomValidity('Batch Number cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+          <div class="form-group">
+            <label for="dateofbirth">Date Of Birth</label>
+            <input type="date" required class="form-control" id="dateofbirth" name="dateofbirth"
+              placeholder="" oninvalid="this.setCustomValidity('Date Of Birth cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+          <div class="form-group">
+            <label for="Division">Divison</label>
+            <input type="text" required class="form-control" id="division" name="division"
+              placeholder="" oninvalid="this.setCustomValidity('Divison cannot be empty')"
+              oninput="this.setCustomValidity('')">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock content %}

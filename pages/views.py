@@ -1,5 +1,6 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse,redirect
 from .models import *
+import datetime
 import django.conf as conf
 from django.contrib import messages
 from django.core.paginator import InvalidPage, Paginator
@@ -32,7 +33,7 @@ def index(request):
 
 
 def Students(request):
-    studentdata = Student.objects.all()
+    studentdata = Student.objects.all().order_by('-date_created')
 
     paginator = Paginator(studentdata, 5, orphans=0)
 
@@ -55,3 +56,33 @@ def Students(request):
                 }    
 
     return render(request,'pages/students.html',context)
+
+def Createstudents(request):
+    if request.method == 'POST':
+       first_name = request.POST['first_name']
+       last_name = request.POST['last_name']
+       std = request.POST['std']
+       batch_number = request.POST['batch_number']
+       dateofbirth = request.POST['dateofbirth']
+       division = request.POST['division']
+       date_created = datetime.datetime.now()
+       student = Student(
+           first_name = first_name,
+           last_name = last_name,
+           std = std,
+           batch_number = batch_number,
+           dateofbirth = dateofbirth,
+           division = division,
+           date_created = date_created)
+       student.save() 
+       messages.success(request, "You have Successfully saved Student")
+       return redirect('/Students/')
+    return render(request,'pages\createstudents.html')
+
+def Createproducts(request):
+    if request.method == 'POST':
+        productname = request.POST['productname']
+        productdescription = request.POST['productdescription']
+        product = Product(productname = productname,productdescription = productdescription)
+        product.save()
+    return render(request,'pages\Createproducts.html')
